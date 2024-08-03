@@ -307,6 +307,7 @@ def ipadapter_execute(model,
         from insightface.utils import face_align
 
         insightface.det_model.input_size = (640,640) # reset the detection size
+        origin_image = image
         image_iface = tensor_to_image(image)
         face_cond_embeds = []
         image = []
@@ -326,7 +327,8 @@ def ipadapter_execute(model,
                         print(f"\033[33mINFO: InsightFace detection resolution lowered to {size}.\033[0m")
                     break
             else:
-                raise Exception('InsightFace: No face detected.')
+                #raise Exception('InsightFace: No face detected.')
+                return (model, origin_image)
         face_cond_embeds = torch.stack(face_cond_embeds).to(device, dtype=dtype)
         image = torch.stack(image)
         del image_iface, face
